@@ -1,4 +1,4 @@
-package cas2xb3_A3_timpau_vt;
+package application;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,7 +8,7 @@ public class fileIO {
 	public String[] readFile(Path filePath) {
 		String[] stringArr = null;
 		try { 
-			stringArr = (String[]) Files.readAllLines(filePath).toArray();
+			stringArr = Files.readAllLines(filePath).toArray(new String[]{});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

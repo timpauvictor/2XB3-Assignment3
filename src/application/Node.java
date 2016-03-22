@@ -1,4 +1,4 @@
-package cas2xb3_A3_timpau_vt;
+package application;
 
 import java.util.Vector;
 
@@ -10,9 +10,6 @@ public class Node {
 		setName(name);
 		setState(state);
 	}
-	
-	
-	
 	
 	public String getName() {
 		return this.name;

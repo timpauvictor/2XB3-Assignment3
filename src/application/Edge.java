@@ -1,4 +1,4 @@
-package cas2xb3_A3_timpau_vt;
+package application;
 
 public class Edge {
 	private Node fromNode;

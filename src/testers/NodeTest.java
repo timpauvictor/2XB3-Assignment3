@@ -1,13 +1,17 @@
-package cas2xb3_A3_timpau_vt;
+package testers;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import application.Edge;
+import application.Node;
+
 public class NodeTest {
 
 	@Test
 	public void test() {
+		//I guess this also counts as testing the edges
 		Node newYork = new Node("New York", "NY");
 		Node philadelphia = new Node("Philadelphia", "PA");
 		Node pittsburg = new Node("Pittsburg", "PA");
