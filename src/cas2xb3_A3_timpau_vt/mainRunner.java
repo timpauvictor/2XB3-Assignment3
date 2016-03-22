@@ -4,6 +4,6 @@ public class mainRunner {
 	public static void main(String[] args) {
 		helperFunctions helper = new helperFunctions();
 		
-	
+		helper.makeGraph();
 	}
 }
