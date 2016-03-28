@@ -10,6 +10,7 @@ import java.util.Vector;
 public class helperFunctions {
 	private fileIO io = new fileIO();
 	private String[][] splitZip = getZips();
+	private String[][] gasPrices = getPriceData();
 	private String startCity;
 	private String destCity;
 	private Vector<Edge> allEdges = new Vector<Edge>();
@@ -82,29 +83,88 @@ public class helperFunctions {
 		return zipArrSplit;
 	}
 	
-	public String getZip(Node node) {
+	public String[] getZipData(Node node) {
+		String toFind = node.getState()[0] + "," + node.getName().toUpperCase();
+		for (int i = 0; i < splitZip.length; i++) {
+			String currentElement = splitZip[i][2] + "," + splitZip[i][3];
+			if (toFind.equals(currentElement)) {
+				return new String[]{splitZip[i][1], splitZip[i][4], splitZip[i][5]};
+			}
+		}
 		
-		
-		return "";
-	}
-	
-	public void getLat(String zipcode) {
-		
-	}
-	
-	public void getLong(String zipcode) {
-		
+		return new String[]{""}; //a match is always found so this will never get returned
 	}
 	
 	public void getWeight(Node from, Node dest) {
-		String fromZip = "";
-		String destZip = "";
+		String[] returnData = getZipData(from);
+		from.setZipCode(returnData[0]);
+		from.setLatitude(returnData[1]);
+		from.setLongitude(returnData[2]);
 		
+		returnData = getZipData(dest);
+		dest.setZipCode(returnData[0]);
+		dest.setLatitude(returnData[1]);
+		dest.setLongitude(returnData[2]);
 		
+		double weight = 0;
+		double distance = getDistance(from, dest);
+		from.setGasPrice(getGas(from));
+		dest.setGasPrice(getGas(dest));
+		
+		distance = (distance / 100) * 8.2;
+		weight = distance * (from.getGasPrice() / 100);
+		System.out.println("Cost from " + from.getName() + " to " + dest.getName() + " is " + weight);
+	}
+	
+	public double getGas(Node node) {
+		String[] states = node.getState();
+		double avgPrice = 0;
+		for (int i = 0; i < states.length; i++) {
+			avgPrice += getPrice(states[i]);
+		}
+		return avgPrice / states.length;
+	}
+	
+	public String[][] getPriceData() {
+		Path filePath = new File("./data/StateGasPrice.csv").toPath();
+		String[] rawData = io.readFile(filePath);
+		String[][] splitData = new String[rawData.length][2];
+		for (int i = 0; i < rawData.length; i++) {
+			splitData[i] = rawData[i].split(",");
+		}
+		return splitData;
+	}
+	
+	public int getPrice(String state) {
+		for (int i = 0; i < gasPrices.length; i++) {
+			if (state.equals(gasPrices[i][0])) {
+//				System.out.println(gasPrices[i][1]);
+				return Integer.parseInt(gasPrices[i][1].trim());
+			}
+		}
+		return 0;
 	}
 	
 	
 	
+	private double getDistance(Node from, Node dest) {
+		double toReturn = 0;
+		double earthRadius = 6372.8;
+		
+		double lat1 = Math.toRadians(Double.parseDouble(from.getLatitude()));
+		double lat2 = Math.toRadians(Double.parseDouble(dest.getLatitude()));
+		double deltaLatitude = Math.toRadians( Double.parseDouble(dest.getLatitude()) - Double.parseDouble(from.getLatitude()));
+		double deltaLongitude = Math.toRadians(Double.parseDouble(dest.getLongitude()) - Double.parseDouble(from.getLongitude()));
+		
+		double a = (Math.sin(deltaLatitude/2)) * (Math.sin(deltaLatitude/2) + (Math.cos(lat1) * Math.cos(lat2)) * 
+				Math.sin(deltaLongitude/2) * Math.sin(deltaLongitude/2));
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		toReturn = earthRadius * c;
+		return toReturn; 
+	}
+		
+
+
 	/**
 	 * function to get the city name from a string that includes the states in brackets
 	 * @param str - string to work with
