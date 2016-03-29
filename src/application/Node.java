@@ -26,7 +26,7 @@ public class Node {
 	
 	public String toString() {
 		String toReturn = "";
-		toReturn += name + ", " + Arrays.toString(states);
+		toReturn += name + Arrays.toString(states);
 		return toReturn;
 	}
 

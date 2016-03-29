@@ -5,5 +5,8 @@ public class mainRunner {
 		helperFunctions helper = new helperFunctions();
 		
 		helper.makeGraph();
+		helper.getInputCities();
+		helper.doDFS();
 	}
 }
+

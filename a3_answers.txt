@@ -1,6 +1,7 @@
 Design Decisions: Since cities can have multiple possible zip codes, I used the first occurence of a valid State,City as that nodes zip code. Cities like New York City that have multiple 
 					states, i used the first state given in the connected cities. I also renamed Pittsburgh in the connected cities to East Pittsburgh as that's what exists in the zips file. 
 					I corrected "Portland(PA)" to "Portland (PA)" to make it more consistent. I also renamed St. Louis to Saint Louis since thats what exists in the zips dataset. 
-					I also changed "New York City" to just "New York". Washington is also now in DC instead of 
+					I also changed "New York City" to just "New York". Washington is also now in DC instead of MD and as a result I added in a DC entry to the state prices and made it the same
+					prices as MD
 
 3.1) The graph will be a weighted undirected graph where the nodes are each city and the edges would be a path between cities. Once the initial graph is created, we can use either the DFS or BFS to find the shortest path between the cities.

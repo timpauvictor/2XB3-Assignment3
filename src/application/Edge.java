@@ -3,9 +3,9 @@ package application;
 public class Edge {
 	private Node fromNode;
 	private Node toNode;
-	private int weight;
+	private double weight;
 	
-	public Edge(Node from, Node to, int weight) {
+	public Edge(Node from, Node to, double weight) {
 		this.fromNode = from;
 		this.toNode = to;
 		this.weight = weight;

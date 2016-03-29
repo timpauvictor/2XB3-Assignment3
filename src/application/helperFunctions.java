@@ -19,12 +19,17 @@ public class helperFunctions {
 	 * gets and sets the input cities defined by the user in /data/a3_in.txt
 	 */
 	public void getInputCities() {
-		Path filePath = new File("../data/a3_in.txt").toPath();
+		Path filePath = new File("./data/a3_in.txt").toPath();
 		String[] stringArr = io.readFile(filePath); 
 		setStartCity(stringArr[0]);
 		setDestCity(stringArr[1]);
 	}
 	
+	public void doDFS() {
+		Graph g = new Graph(allEdges);
+		g.dfs(startCity, destCity);
+		
+	}
 	
 	/**
 	 * reads the connected cities file and makes the graph necessary
@@ -45,8 +50,11 @@ public class helperFunctions {
 			String[] destStates = getCityStates(splitArr[i][1]);
 			Node fromNode = new Node(fromCity, fromStates);
 			Node destNode = new Node(destCity, destStates);
-			
 			getWeight(fromNode, destNode);
+			Edge newEdge = new Edge(fromNode, destNode, getWeight(fromNode, destNode));
+			allEdges.add(newEdge);
+			newEdge = new Edge(destNode, fromNode, getWeight(destNode, fromNode));
+			allEdges.add(newEdge);
 		}
 	}
 	
@@ -83,6 +91,11 @@ public class helperFunctions {
 		return zipArrSplit;
 	}
 	
+	/**
+	 * function to return all usable data contained in a 
+	 * @param node
+	 * @return
+	 */
 	public String[] getZipData(Node node) {
 		String toFind = node.getState()[0] + "," + node.getName().toUpperCase();
 		for (int i = 0; i < splitZip.length; i++) {
@@ -95,7 +108,13 @@ public class helperFunctions {
 		return new String[]{""}; //a match is always found so this will never get returned
 	}
 	
-	public void getWeight(Node from, Node dest) {
+	/**
+	 * function to calculate the weight for the path between two nodes
+	 * @param from the node we're coming from
+	 * @param dest the node we're going to
+	 * @return the weight as a double
+	 */
+	public double getWeight(Node from, Node dest) {
 		String[] returnData = getZipData(from);
 		from.setZipCode(returnData[0]);
 		from.setLatitude(returnData[1]);
@@ -113,9 +132,14 @@ public class helperFunctions {
 		
 		distance = (distance / 100) * 8.2;
 		weight = distance * (from.getGasPrice() / 100);
-		System.out.println("Cost from " + from.getName() + " to " + dest.getName() + " is " + weight);
+		return weight;
 	}
 	
+	/**
+	 * function to get the gas price for a node
+	 * @param node for which we are searching got gas prices
+	 * @return a double containing the average price
+	 */
 	public double getGas(Node node) {
 		String[] states = node.getState();
 		double avgPrice = 0;
@@ -125,6 +149,10 @@ public class helperFunctions {
 		return avgPrice / states.length;
 	}
 	
+	/**
+	 * reads the gas prices csv and prepares it as a nice 2d array
+	 * @return a String[][] containing the data in the files
+	 */
 	public String[][] getPriceData() {
 		Path filePath = new File("./data/StateGasPrice.csv").toPath();
 		String[] rawData = io.readFile(filePath);
@@ -135,6 +163,11 @@ public class helperFunctions {
 		return splitData;
 	}
 	
+	/**
+	 * function get the gas price for a certain state
+	 * @param state as a string
+	 * @return return an integer containing the gas price
+	 */
 	public int getPrice(String state) {
 		for (int i = 0; i < gasPrices.length; i++) {
 			if (state.equals(gasPrices[i][0])) {
@@ -146,7 +179,12 @@ public class helperFunctions {
 	}
 	
 	
-	
+	/**
+	 * function to find the haversine distance between two coordinates
+	 * @param from - the node we're coming from
+	 * @param dest - the node we're going to
+	 * @return the distance in kms as a double
+	 */
 	private double getDistance(Node from, Node dest) {
 		double toReturn = 0;
 		double earthRadius = 6372.8;
@@ -239,7 +277,10 @@ public class helperFunctions {
 		return destCity;
 	}
 
-	
+	/**
+	 * set the destination city 
+	 * @param destCity
+	 */
 	public void setDestCity(String destCity) {
 		this.destCity = destCity;
 	}
