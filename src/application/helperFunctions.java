@@ -27,7 +27,8 @@ public class helperFunctions {
 	
 	public void doDFS() {
 		Graph g = new Graph(allEdges);
-		g.dfs(startCity, destCity);
+		Stack s = g.dfs(startCity, destCity);
+		System.out.println(s);
 		
 	}
 	
@@ -283,5 +284,25 @@ public class helperFunctions {
 	 */
 	public void setDestCity(String destCity) {
 		this.destCity = destCity;
+	}
+
+	public void doBFS() {
+		Graph g = new Graph(allEdges);
+		Stack s = g.bfs(startCity, destCity);
+		System.out.println(s);
+	}
+
+	public void doShortest() {
+		Graph g = new Graph(allEdges);
+		Vector v = g.findShortestPath(startCity, destCity);
+		System.out.println(backwards(v));
+	}
+	
+	public String backwards(Vector v) {
+		String toReturn = "";
+		for (int i = v.size() - 1; i > 0; i--) {
+			toReturn += v.get(i) + ",";
+		}
+		return toReturn;
 	}
 }

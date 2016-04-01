@@ -6,7 +6,9 @@ public class mainRunner {
 		
 		helper.makeGraph();
 		helper.getInputCities();
-		helper.doDFS();
+//		helper.doDFS();
+//		helper.doBFS();
+		helper.doShortest();
 	}
 }
 
